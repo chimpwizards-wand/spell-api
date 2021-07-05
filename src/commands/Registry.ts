@@ -15,7 +15,7 @@ export class Registry extends Command  {
     execute(yargs: any): void {
         debug(`Do Nothing`)
         const executer = new Execute();
-        let cmd = `w a regitry --help`;
+        let cmd = `w a r --help`;
         executer.run({cmd: cmd, showLog: false})
     } 
 
