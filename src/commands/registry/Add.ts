@@ -38,11 +38,13 @@ export class Add extends Command  {
 
             debug(`Check if api is already added into the config`)
             let exists =  false;
-            if (parentContext.apis) {
-                exists = _.find(parentContext.apis, {name:this.name})
+            parentContext.commands = parentContext.commands || {}
+
+            if (parentContext.commands.api) {
+                exists = _.find(parentContext.commands.api, {name:this.name})
             } else {
                 debug(`Creating apis bucket in config`)
-                parentContext['apis'] = []
+                parentContext.commands['api'] = []
             }
 
             if (exists) {
@@ -51,10 +53,15 @@ export class Add extends Command  {
                 debug(`Add the api to the current context becase doesn't exists`)
                 let api: any = {
                     name: this.name,
-                    swagger: this.swagger
+                    type: "swagger",
+                    config: {
+                        url: this.swagger,
+                        executer: `w a ns call --name ${this.name}`,
+                        attacher: `w a ns define --name ${this.name}`
+                    }
                 }
                 
-                parentContext.apis.push(api)
+                parentContext.commands.api.push(api)
                 config.save( {context: parentContext} )
             }
 
