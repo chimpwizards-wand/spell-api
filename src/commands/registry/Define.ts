@@ -49,13 +49,14 @@ export class Define extends Command  {
 
             debug(`Check if api is already added into the config`)
             let exists;
+            let swaggerUrl;
             parentContext.commands = parentContext.commands || {}
 
             if (parentContext.commands.api) {
                 exists = _.find(parentContext.commands.api, {name:this.name})
-            }
 
-            var swaggerUrl = exists?.config?.url||this.swagger;
+                swaggerUrl = exists?.config?.url||this.swagger;
+            }
 
             if (swaggerUrl) {
                 debug(`API already registered`)
