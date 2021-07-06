@@ -155,7 +155,6 @@ export class Define extends Command  {
                             //Create subcommand. eg. findById
                             this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.parameters,plugins);
 
-
                         }
                         
                         
