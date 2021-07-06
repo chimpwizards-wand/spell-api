@@ -147,7 +147,7 @@ export class Define extends Command  {
                             var subCommand: string = key.split("/")[1];
 
                             //Create methos eg. get
-                            this.addPlugin(`aip:${apiName}`,action,[],plugins);
+                            this.addPlugin(`api:${apiName}`,action,[],plugins);
 
                             //Create command eg. pet
                             this.addPlugin(`api:${apiName}:${action}`,subCommand,[],plugins);
