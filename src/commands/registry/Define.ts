@@ -58,6 +58,7 @@ export class Define extends Command  {
                 swaggerUrl = exists?.config?.url||this.swagger;
             }
 
+            debug(`swaggerUrl: ${swaggerUrl}`)
             if (swaggerUrl) {
                 debug(`API already registered`)
                 debug(`URL: ${swaggerUrl}`)
