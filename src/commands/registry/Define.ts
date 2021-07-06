@@ -30,7 +30,7 @@ export class Define extends Command  {
 
     execute(yargs: any): void {
         debug(`Name: ${this.name}`)
-        this.getDefinition().then(commands => {
+        this.getPlugins(this.name).then(commands => {
             debug(`COMMANDS: ${JSON.stringify(commands)}`)
             console.log(JSON.stringify(commands));
         });
@@ -42,6 +42,7 @@ export class Define extends Command  {
 
         const config = new Config();
         var commands: any = []
+        var plugins: any = []
 
 
         if (config.inContext({dir: process.cwd()})) {
@@ -71,6 +72,8 @@ export class Define extends Command  {
                             var actionSpec = pathSpec[action]
 
                             var subCommand: string = key.split("/")[1];
+
+                            //Commands
                             var command: any = {
                                 name: subCommand,
                                 commands: []
@@ -102,6 +105,109 @@ export class Define extends Command  {
         }
 
         return commands;
+
+    }
+
+    async getPlugins(apiName: string) {
+        debug(`getPlugins`)
+
+        const config = new Config();
+        var plugins: any = []
+
+
+        if (config.inContext({dir: process.cwd()})) {
+            const parentContext = config.load({})
+
+            debug(`Check if api is already added into the config`)
+            let exists;
+            let swaggerUrl;
+            parentContext.commands = parentContext.commands || {}
+
+            if (parentContext.commands.api) {
+                exists = _.find(parentContext.commands.api, {name:apiName})
+
+                swaggerUrl = exists?.config?.url||this.swagger;
+            }
+
+            debug(`swaggerUrl: ${swaggerUrl}`)
+            if (swaggerUrl) {
+                debug(`API already registered`)
+                debug(`URL: ${swaggerUrl}`)
+
+                await Swagger(swaggerUrl).then( (client: any) => {
+                    debug(`Swagger document found`)
+                    for (const key in client.spec.paths) {
+                        var pathSpec = client.spec.paths[key];
+                        for(const action in pathSpec) {
+                            var actionSpec = pathSpec[action]
+
+                            var subCommand: string = key.split("/")[1];
+
+                            //Create methos eg. get
+                            this.addPlugin(`${apiName}`,action,[],plugins);
+
+                            //Create command eg. pet
+                            this.addPlugin(`${apiName}:${action}`,subCommand,[],plugins);
+
+                            //Create subcommand. eg. findById
+                            this.addPlugin(`${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.parameters,plugins);
+
+
+                        }
+                        
+                        
+
+                    }
+                    debug(`Commands ready: ${JSON.stringify(plugins)}`)
+
+                    
+                });
+
+            } else {
+                console.log(chalk.red(`API is not registered`))
+            }
+        }
+
+        return plugins;
+
+    }
+
+    addPlugin(parent: string, name: string, parameters: any, plugins: any) {
+        debug(`addPlugin`)
+        var exists = _.find(plugins, {name:name})
+
+        if(!exists) {
+            let commandConfiguration: any = {
+                command: {},
+                args: [],
+                options: [],
+                executer: () => {}
+            }
+
+            //Create methos eg. get
+            commandConfiguration.command = {
+                name: name,
+                aliases: name.substring(1,1),
+                description: name,
+                examples: [], 
+                parent: parent,
+            }
+
+            for ( let p in parameters) {
+                let param: any = parameters[p];
+                let option = {
+                    attr: param.name,
+                    name: param.name,
+                    definition: param.description,
+                    defaults: param.defaults,
+                    required: param.required||false,
+                    whatIsThis: 'option'
+                }
+                commandConfiguration.options.push(option)
+            }
+
+            plugins.push(commandConfiguration)
+        }
 
     }
 
