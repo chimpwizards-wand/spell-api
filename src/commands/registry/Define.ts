@@ -37,7 +37,7 @@ export class Define extends Command  {
 
     }
 
-    async getDefinition(overrideName: string) {
+    async getDefinition() {
         debug(`getDefinition`)
 
         const config = new Config();
@@ -53,7 +53,7 @@ export class Define extends Command  {
             parentContext.commands = parentContext.commands || {}
 
             if (parentContext.commands.api) {
-                exists = _.find(parentContext.commands.api, {name:overrideName||this.name})
+                exists = _.find(parentContext.commands.api, {name:this.name})
 
                 swaggerUrl = exists?.config?.url||this.swagger;
             }
