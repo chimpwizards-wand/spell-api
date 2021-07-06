@@ -67,26 +67,24 @@ export class Define extends Command  {
                 debug(`URL: ${swaggerUrl}`)
 
                 await Swagger(swaggerUrl).then( (client: any) => {
-                    //client.spec // The resolved spec
-                    //client.originalSpec // In case you need it
-                    //client.errors // Any resolver errors
-                
-                    // Tags interface
-                    //client.apis.pet.addPet({id: 1, name: "bobby"}).then(...)
-                
-                    // TryItOut Executor, with the `spec` already provided
-                    //client.execute({operationId: 'addPet', parameters: {id: 1, name: "bobby") }).then(...)
-
                     debug(`Swagger document found`)
                     for (const key in client.spec.paths) {
                         var pathSpec = client.spec.paths[key];
-                        
-
                         for(const action in pathSpec) {
                             var actionSpec = pathSpec[action]
 
+                            var subCommand: string = key.split("/")[1];
                             var command: any = {
-                                name: key
+                                name: subCommand,
+                                commands: []
+                            }
+
+                            if (actionSpec.operationId) {
+                                command.commands.push({
+                                    name: actionSpec.operationId,
+                                    path: key,
+                                    parameters: actionSpec.parameters
+                                })
                             }
 
                             this.addCommand(command, commands, action);
@@ -118,7 +116,24 @@ export class Define extends Command  {
             commands.push(parentCommand)
         }
         parentCommand.commands = parentCommand.commands || []
-        parentCommand.commands.push(command);
+
+        if ( command.name == "pet" && parent == "get" ) {
+            debug('FOUND')
+        }
+
+        var selfCommand: any = this.findCommand(command.name, parentCommand.commands);
+
+        if(selfCommand) {
+            debug(`Merge`)
+            _.mergeWith(selfCommand,command, (objValue: any, srcValue: any)=>{
+                if (_.isArray(objValue)) {
+                    return objValue.concat(srcValue);
+                  }
+            });
+        } else {
+            parentCommand.commands.push(command);
+        }
+        debug('Command added')
 
     }
 
