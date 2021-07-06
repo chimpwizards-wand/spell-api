@@ -137,7 +137,7 @@ export class Define extends Command  {
                 await Swagger(swaggerUrl).then( (client: any) => {
                     debug(`Swagger document found`)
                     //Create methos eg. petstore
-                    this.addPlugin(`api`,apiName,[],plugins);
+                    this.addPlugin(`api`,apiName,client.spec.info.description,[],plugins);
 
                     for (const key in client.spec.paths) {
                         var pathSpec = client.spec.paths[key];
@@ -147,13 +147,13 @@ export class Define extends Command  {
                             var subCommand: string = key.split("/")[1];
 
                             //Create methos eg. get
-                            this.addPlugin(`api:${apiName}`,action,[],plugins);
+                            this.addPlugin(`api:${apiName}`,action,action,[],plugins);
 
                             //Create command eg. pet
-                            this.addPlugin(`api:${apiName}:${action}`,subCommand,[],plugins);
+                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,[],plugins);
 
                             //Create subcommand. eg. findById
-                            this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.parameters,plugins);
+                            this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);
 
                         }
                         
@@ -174,7 +174,7 @@ export class Define extends Command  {
 
     }
 
-    addPlugin(parent: string, name: string, parameters: any, plugins: any) {
+    addPlugin(parent: string, name: string, descripcion: string, parameters: any, plugins: any) {
         debug(`addPlugin`)
         var exists = _.find(plugins, {name:name})
 
@@ -190,7 +190,7 @@ export class Define extends Command  {
             commandConfiguration.command = {
                 name: name,
                 aliases: name.substring(1,1),
-                description: name,
+                description: descripcion,
                 examples: [], 
                 parent: parent,
             }
