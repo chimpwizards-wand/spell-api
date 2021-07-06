@@ -136,6 +136,9 @@ export class Define extends Command  {
 
                 await Swagger(swaggerUrl).then( (client: any) => {
                     debug(`Swagger document found`)
+                    //Create methos eg. petstore
+                    this.addPlugin(`api`,apiName,[],plugins);
+
                     for (const key in client.spec.paths) {
                         var pathSpec = client.spec.paths[key];
                         for(const action in pathSpec) {
@@ -144,13 +147,13 @@ export class Define extends Command  {
                             var subCommand: string = key.split("/")[1];
 
                             //Create methos eg. get
-                            this.addPlugin(`${apiName}`,action,[],plugins);
+                            this.addPlugin(`aip:${apiName}`,action,[],plugins);
 
                             //Create command eg. pet
-                            this.addPlugin(`${apiName}:${action}`,subCommand,[],plugins);
+                            this.addPlugin(`api:${apiName}:${action}`,subCommand,[],plugins);
 
                             //Create subcommand. eg. findById
-                            this.addPlugin(`${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.parameters,plugins);
+                            this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.parameters,plugins);
 
 
                         }
