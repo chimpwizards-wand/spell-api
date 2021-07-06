@@ -3,7 +3,6 @@ import { Command, Config } from  '@chimpwizards/wand'
 import { CommandDefinition, CommandParameter, CommandArgument } from '@chimpwizards/wand/commons/command/'
 import * as _ from 'lodash';  
 
-
 //import Swagger from 'swagger-client'
 const Swagger = require('swagger-client')
 
