@@ -1,13 +1,9 @@
 import Debug from 'debug';
-import { Command } from  '@chimpwizards/wand'
-import { Config } from '@chimpwizards/wand'
+import { Command, Config } from  '@chimpwizards/wand'
 import { CommandDefinition, CommandParameter, CommandArgument } from '@chimpwizards/wand/commons/command/'
-
-import * as fs from 'fs';
-import * as path from 'path';
 import * as _ from 'lodash';  
-import { runInThisContext } from 'vm';
-import { config } from 'yargs';
+
+
 //import Swagger from 'swagger-client'
 const Swagger = require('swagger-client')
 

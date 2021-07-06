@@ -56,7 +56,7 @@ export class Add extends Command  {
                     type: "swagger",
                     config: {
                         url: this.swagger,
-                        handler: `"@chimpwizards-wand/spell-api/Define"`,
+                        handler: `"@chimpwizards-wand/spell-api"`,
                     }
                 }
                 
