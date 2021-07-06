@@ -55,7 +55,7 @@ export class Define extends Command  {
                 exists = _.find(parentContext.commands.api, {name:this.name})
             }
 
-            var swaggerUrl = exists.config?.url||this.swagger;
+            var swaggerUrl = exists?.config?.url||this.swagger;
 
             if (swaggerUrl) {
                 debug(`API already registered`)
