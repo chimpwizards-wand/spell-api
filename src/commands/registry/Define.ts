@@ -204,7 +204,7 @@ export class Define extends Command  {
                     attr: param.name,
                     name: param.name,
                     //definition: { description: param.description, type: param.type, defaults: param.defaults },
-                    definition: { description: param.description, type: 'string', defaults: param.defaults, alias: param.name.chartAt(0) },
+                    definition: { description: param.description, type: 'string', defaults: param.defaults, alias: param.name.charAt(0) },
                     required: false, //param.required||false,
                     whatIsThis: 'option'
                 }
