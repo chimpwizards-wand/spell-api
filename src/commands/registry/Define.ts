@@ -189,7 +189,7 @@ export class Define extends Command  {
             //Create methos eg. get
             commandConfiguration.command = {
                 name: name,
-                aliases: name.substring(1,1),
+                aliases: name.charAt(0),
                 description: descripcion,
                 examples: [], 
                 parent: parent,
@@ -200,7 +200,7 @@ export class Define extends Command  {
                 let option = {
                     attr: param.name,
                     name: param.name,
-                    definition: param.description,
+                    definition: { description: param.description, type: param.type, default: param.defaults },
                     defaults: param.defaults,
                     required: param.required||false,
                     whatIsThis: 'option'

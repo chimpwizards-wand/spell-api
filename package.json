@@ -22,6 +22,7 @@
     "@chimpwizards/wand": "^1.0.0"
   },
   "dependencies": {
+    "@chimpwizards-wand/spell-api": "^2.0.15",
     "chalk": "^4.0.0",
     "cli-progress": "^3.8.2",
     "debug": "^4.1.1",
