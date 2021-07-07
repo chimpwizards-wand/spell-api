@@ -210,7 +210,6 @@ export class Define extends Command  {
                 }
                 commandConfiguration.options.push(option)
             }
-
             plugins.push(commandConfiguration)
         }
 
