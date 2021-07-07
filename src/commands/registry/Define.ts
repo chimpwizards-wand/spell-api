@@ -150,10 +150,10 @@ export class Define extends Command  {
                             this.addPlugin(`api:${apiName}`,action,action,[],plugins);
 
                             //Create command eg. pet
-                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,[],plugins);
+                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins);
 
                             //Create subcommand. eg. findById
-                            this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);
+                            //this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);
 
                         }
                         
