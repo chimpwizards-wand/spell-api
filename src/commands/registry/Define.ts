@@ -154,6 +154,10 @@ export class Define extends Command  {
 
                             //Create subcommand. eg. findById
                             //this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);
+
+                            if ( key == "/pet/{petId}/uploadImage") {
+                                debug(`found`)
+                            }
                         }
                         
                         
@@ -199,9 +203,9 @@ export class Define extends Command  {
                 let option = {
                     attr: param.name,
                     name: param.name,
-                    definition: { description: param.description, type: param.type, default: param.defaults },
-                    defaults: param.defaults,
-                    required: param.required||false,
+                    //definition: { description: param.description, type: param.type, defaults: param.defaults },
+                    definition: { description: param.description, type: 'string', defaults: param.defaults, alias: param.name.chartAt(0) },
+                    required: false, //param.required||false,
                     whatIsThis: 'option'
                 }
                 commandConfiguration.options.push(option)
