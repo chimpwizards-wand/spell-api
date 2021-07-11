@@ -5,6 +5,8 @@ const debug = Debug("w:cli:api:handler");
 
 export class Handler  { 
 
+    context: any= {};
+
     execute(yargs: any): void {
         debug(`Do Nothing`)
         
