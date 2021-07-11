@@ -37,6 +37,7 @@ export class Define extends Command  {
 
     }
 
+    //Depredicated
     async getDefinition() {
         debug(`getDefinition`)
 
@@ -94,7 +95,7 @@ export class Define extends Command  {
                         
 
                     }
-                    debug(`Commands ready: ${JSON.stringify(commands)}`)
+                    //debug(`Commands ready: ${JSON.stringify(commands)}`)
 
                     
                 });
@@ -150,7 +151,7 @@ export class Define extends Command  {
                             this.addPlugin(`api:${apiName}`,action,action,[],plugins);
 
                             //Create command eg. pet
-                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins, {path: key, spec: pathSpec});
+                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins, {path: key, spec: pathSpec, actions: [actionSpec.operationId]});
 
                             //Create subcommand. eg. findById
                             //this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);

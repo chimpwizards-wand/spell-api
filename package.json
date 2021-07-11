@@ -22,7 +22,6 @@
     "@chimpwizards/wand": "^1.0.0"
   },
   "dependencies": {
-    "@chimpwizards-wand/spell-api": "^2.0.15",
     "chalk": "^4.0.0",
     "cli-progress": "^3.8.2",
     "debug": "^4.1.1",
@@ -31,7 +30,6 @@
     "swagger-client": "^3.13.5"
   },
   "devDependencies": {
-    "@chimpwizards/wand": "^1.0.45",
     "@types/clear": "^0.1.0",
     "@types/debug": "^4.1.5",
     "@types/figlet": "^1.2.0",
