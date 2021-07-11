@@ -28,7 +28,7 @@ export class Handler  {
                     var diff = _.difference(options,params)
 
                     if ( diff.length == 0 ) {
-                        debug(`found match ${path[method].operationId}`)
+                        debug(`found operation match ${path[method].operationId}`)
                         operationId=path[method].operationId;
                         break;
                     }
