@@ -150,7 +150,7 @@ export class Define extends Command  {
                             this.addPlugin(`api:${apiName}`,action,action,[],plugins);
 
                             //Create command eg. pet
-                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins);
+                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins, {path: key, spec: pathSpec});
 
                             //Create subcommand. eg. findById
                             //this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);
@@ -177,7 +177,7 @@ export class Define extends Command  {
 
     }
 
-    addPlugin(parent: string, name: string, descripcion: string, parameters: any, plugins: any) {
+    addPlugin(parent: string, name: string, descripcion: string, parameters: any, plugins: any, context?: any) {
         debug(`addPlugin`)
         var exists = _.find(plugins, {name:name})
 
@@ -206,7 +206,8 @@ export class Define extends Command  {
                     //definition: { description: param.description, type: param.type, defaults: param.defaults },
                     definition: { description: param.description, type: 'string', defaults: param.defaults, alias: param.name.charAt(0) },
                     required: false, //param.required||false,
-                    whatIsThis: 'option'
+                    whatIsThis: 'option',
+                    context: context
                 }
                 commandConfiguration.options.push(option)
             }
