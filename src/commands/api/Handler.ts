@@ -28,8 +28,10 @@ export class Handler  {
                     var diff = _.difference(options,params)
 
                     if ( diff.length == 0 ) {
-                        debug(`found operation match ${path[method].operationId}`)
-                        operationId=path[method].operationId;
+                        path[method].operationId = path[method].operationId || method+_.capitalize(api);
+                        operationId=path[method].operationId
+                        debug(`found operation match ${operationId}`)
+                        
                         break;
                     }
                 }
@@ -66,10 +68,26 @@ export class Handler  {
                 debug(`API already registered`)
                 debug(`URL: ${swaggerUrl}`)
                 
+                var urlPaths: string[] = swaggerUrl.split("/");
+                delete urlPaths[urlPaths.length -1]
+                var serverUrl: string = urlPaths.join("/")
+
                 Swagger(swaggerUrl).then( (client: any) => {
                     debug(`calling endpoint`)
 
+                    var url = new URL(client.spec.basePath||'', serverUrl);
+
+                    if ( !client.spec.servers ) {
+                        client.spec.servers = [{
+                            url: url.href,
+                            name: this.name,
+                          }
+                        ]
+                    }
+
                     var operationId = this.findOperation(yargs, client)
+
+
 
                     const params: any = {
                         spec: client.spec,
@@ -85,6 +103,7 @@ export class Handler  {
                             }
                         },                        
                         requestContentType: 'application/json',
+                        contextUrl: url.href
                       };
                       
                     const req =Swagger.buildRequest({...params})
