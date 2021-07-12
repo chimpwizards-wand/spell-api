@@ -62,12 +62,9 @@ export class Handler  {
 
             debug(`swaggerUrl: ${swaggerUrl}`)
             if (swaggerUrl) {
-                var self = this;
                 debug(`API already registered`)
                 debug(`URL: ${swaggerUrl}`)
-                var path = '/pet/{petId}';
                 
-
                 Swagger(swaggerUrl).then( (client: any) => {
                     debug(`calling endpoint`)
 
