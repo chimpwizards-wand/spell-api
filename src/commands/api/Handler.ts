@@ -44,7 +44,6 @@ export class Handler  {
     execute(yargs: any): void {
         debug(`Do Nothing`)
         debug(`YARGS ${JSON.stringify(yargs)}`)
-        //debug(`CONTEXT ${JSON.stringify(this.context)}`)
         
         const config = new Config();
         if (config.inContext({dir: process.cwd()})) {
