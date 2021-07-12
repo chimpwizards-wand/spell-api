@@ -93,7 +93,7 @@ export class Handler  {
 
                     Swagger.execute({...params}).then( (response:any) => {
                         debug(`Data reciveid`)
-                        console.log(response.data)
+                        console.log(response.data||{})
                     });
 
                 });
