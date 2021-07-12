@@ -194,7 +194,7 @@ export class Define extends Command  {
             commandConfiguration.command = {
                 name: name,
                 aliases: name.charAt(0),
-                description: descripcion,
+                description: descripcion||name,
                 examples: [], 
                 parent: parent,
             }
