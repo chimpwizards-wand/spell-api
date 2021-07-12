@@ -30,6 +30,7 @@
     "swagger-client": "^3.13.5"
   },
   "devDependencies": {
+    "@chimpwizards/wand": "^1.0.49",
     "@types/clear": "^0.1.0",
     "@types/debug": "^4.1.5",
     "@types/figlet": "^1.2.0",
