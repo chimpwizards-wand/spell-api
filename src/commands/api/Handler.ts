@@ -49,12 +49,13 @@ export class Handler  {
         if (config.inContext({dir: process.cwd()})) {
             const parentContext = config.load({})
 
-            debug(`Check if api is already added into the config`)
+            debug(`Check if api is already added into the config for ${this.name}`)
             let exists;
             let swaggerUrl;
             parentContext.commands = parentContext.commands || {}
 
             if (parentContext.commands.api) {
+                debug(`api section exists`)
                 exists = _.find(parentContext.commands.api, {name: this.name})
 
                 swaggerUrl = exists?.config?.url;
