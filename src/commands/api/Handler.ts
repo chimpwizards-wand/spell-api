@@ -93,6 +93,7 @@ export class Handler  {
                         spec: client.spec,
                         operationId: operationId,
                         parameters: yargs,
+                        //securities: { authorized: this.authorizations },
                         securities: {
                             authorized: {
                                 myOAuth2Implicit: {
