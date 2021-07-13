@@ -1,5 +1,6 @@
 import Debug from 'debug';
 import {  Config } from  '@chimpwizards/wand'
+import { Execute } from  '@chimpwizards/wand'
 const chalk = require('chalk');
 const debug = Debug("w:cli:api:handler");
 const Swagger = require('swagger-client')
@@ -107,15 +108,22 @@ export class Handler  {
                         contextUrl: url.href
                       };
                       
-                    const req =Swagger.buildRequest({...params})
-                    debug(`METHOD: ${req.method}`)
-                    debug(`URL: ${req.url}`)
-                    debug(`HEADERS: ${JSON.stringify(req.headers)}`)
+                    if ( operationId != '' ) {
+                        const req =Swagger.buildRequest({...params})
+                        debug(`METHOD: ${req.method}`)
+                        debug(`URL: ${req.url}`)
+                        debug(`HEADERS: ${JSON.stringify(req.headers)}`)
 
-                    Swagger.execute({...params}).then( (response:any) => {
-                        debug(`Data reciveid`)
-                        console.log(response.data||{})
-                    });
+                        Swagger.execute({...params}).then( (response:any) => {
+                            debug(`Data reciveid`)
+                            console.log(response.data||{})
+                        });
+                    } else {
+                        debug(`Operation not found`)
+                        const executer = new Execute();
+                        let cmd = `w ${yargs["_"].join(" ")} --help`;
+                        executer.run({cmd: cmd, showLog: false})
+                    }
 
                 });
             }            
