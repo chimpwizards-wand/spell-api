@@ -12,6 +12,9 @@ export class Handler  {
     context: any= {};
     name: string = '';
 
+    makeOperationName(method: string, api: string, params: any) {
+        return method+_.capitalize(api);
+    }
 
     findOperation(yargs: any, client: any): string {
         debug(`findOperation`)
@@ -29,7 +32,7 @@ export class Handler  {
                     var diff = _.difference(options,params)
 
                     if ( diff.length == 0 ) {
-                        path[method].operationId = path[method].operationId || method+_.capitalize(api);
+                        path[method].operationId = path[method].operationId || this.makeOperationName(method,api,options);
                         operationId=path[method].operationId
                         debug(`found operation match ${operationId}`)
                         
