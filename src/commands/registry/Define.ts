@@ -201,7 +201,7 @@ export class Define extends Command  {
             }
 
             //Add authorization/token command option 
-            let authExists = commandConfiguration.options.find( (x: any) => x.name == "token")
+            let authExists = commandConfiguration.options.find( (x: any) => x.name == "token");
             if (!authExists)
                 commandConfiguration.options.push({
                     attr: "token",
