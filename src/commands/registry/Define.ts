@@ -142,7 +142,7 @@ export class Define extends Command  {
                     debug(`Swagger document found`)
                     //Create methos eg. petstore
                     this.addPlugin(`api`,apiName,client.spec.info.description,[],plugins, false);
-                    var allSubcommands: string[] = []
+                    var allSubcommands: any[] = [];
 
                     for (const key in client.spec.paths) {
                         var pathSpec = client.spec.paths[key];
@@ -152,10 +152,13 @@ export class Define extends Command  {
                             var actionSpec = pathSpec[action]
 
                             var subCommand: string = key.split("/")[1];
-                            var existsSubCOmmand= allSubcommands.includes(subCommand);
+                            var existsSubCOmmand= allSubcommands.find( (x: any) => x.action == action && x.name == subCommand);
                             var enableAuth: boolean = !existsSubCOmmand;
                             if(!existsSubCOmmand) {
-                                allSubcommands.push(subCommand)
+                                allSubcommands.push({
+                                    action: action,
+                                    name: subCommand
+                                })
                             }
 
                             
@@ -213,12 +216,13 @@ export class Define extends Command  {
             }
 
             //Add authorization/token command option 
-            if (enableAuth) {
+            if (enableAuth) {   
+                debug(`Add AuthN token option for ${name}`)
                 commandConfiguration.options.push({
                     attr: "token",
                     name: "token",
                     //definition: { description: param.description, type: param.type, defaults: param.defaults },
-                    definition: { description: "Authorization token", type: 'string', alias: "k" },
+                    definition: { description: "Authentication token", type: 'string', alias: "k" },
                     required: false, //param.required||false,
                     whatIsThis: 'option',
                     context: context
