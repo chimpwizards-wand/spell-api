@@ -2,6 +2,7 @@ import Debug from 'debug';
 import { Command, Config } from  '@chimpwizards/wand'
 import { CommandDefinition, CommandParameter, CommandArgument } from '@chimpwizards/wand/commons/command/'
 import * as _ from 'lodash';  
+import { xor } from 'lodash';
 
 //import Swagger from 'swagger-client'
 const Swagger = require('swagger-client')
@@ -200,15 +201,18 @@ export class Define extends Command  {
             }
 
             //Add authorization/token command option 
-            commandConfiguration.options.push({
-                attr: "token",
-                name: "token",
-                //definition: { description: param.description, type: param.type, defaults: param.defaults },
-                definition: { description: "Authorization token", type: 'string', alias: "x" },
-                required: false, //param.required||false,
-                whatIsThis: 'option',
-                context: context
-            });
+            let authExists = commandConfiguration.options.find( (x: any) => x.name == "token")
+            if (!authExists)
+                commandConfiguration.options.push({
+                    attr: "token",
+                    name: "token",
+                    //definition: { description: param.description, type: param.type, defaults: param.defaults },
+                    definition: { description: "Authorization token", type: 'string', alias: "x" },
+                    required: false, //param.required||false,
+                    whatIsThis: 'option',
+                    context: context
+                });
+            }
 
             //Add command options
             for ( let p in parameters) {
