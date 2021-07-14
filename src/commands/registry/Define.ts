@@ -97,9 +97,7 @@ export class Define extends Command  {
                             
 
                         }
-                        //debug(`Commands ready: ${JSON.stringify(commands)}`)
-
-                        
+                       
                     });
                 } catch (e) {
                     debug(`Error pulling ${swaggerUrl} definition`)
