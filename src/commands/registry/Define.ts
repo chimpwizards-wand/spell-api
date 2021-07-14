@@ -141,20 +141,30 @@ export class Define extends Command  {
                 await Swagger(swaggerUrl).then( (client: any) => {
                     debug(`Swagger document found`)
                     //Create methos eg. petstore
-                    this.addPlugin(`api`,apiName,client.spec.info.description,[],plugins);
+                    this.addPlugin(`api`,apiName,client.spec.info.description,[],plugins, false);
+                    var allSubcommands: string[] = []
 
                     for (const key in client.spec.paths) {
                         var pathSpec = client.spec.paths[key];
+
+                        
                         for(const action in pathSpec) {
                             var actionSpec = pathSpec[action]
 
                             var subCommand: string = key.split("/")[1];
+                            var existsSubCOmmand= allSubcommands.includes(subCommand);
+                            var enableAuth: boolean = !existsSubCOmmand;
+                            if(!existsSubCOmmand) {
+                                allSubcommands.push(subCommand)
+                            }
+
+                            
 
                             //Create methos eg. get
-                            this.addPlugin(`api:${apiName}`,action,action,[],plugins);
+                            this.addPlugin(`api:${apiName}`,action,action,[],plugins, false);
 
                             //Create command eg. pet
-                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins, {path: key, spec: pathSpec, actions: [actionSpec.operationId]});
+                            this.addPlugin(`api:${apiName}:${action}`,subCommand,subCommand,actionSpec.parameters,plugins, enableAuth, {path: key, spec: pathSpec, actions: [actionSpec.operationId]});
 
                             //Create subcommand. eg. findById
                             //this.addPlugin(`api:${apiName}:${action}:${subCommand}`,actionSpec.operationId,actionSpec.summary,actionSpec.parameters,plugins);
@@ -181,8 +191,8 @@ export class Define extends Command  {
 
     }
 
-    addPlugin(parent: string, name: string, descripcion: string, parameters: any, plugins: any, context?: any) {
-        debug(`addPlugin`)
+    addPlugin(parent: string, name: string, descripcion: string, parameters: any, plugins: any, enableAuth: boolean, context?: any) {
+        debug(`addPlugin ${name}`)
         var exists = _.find(plugins, {name:name})
 
         if(!exists) {
@@ -203,8 +213,7 @@ export class Define extends Command  {
             }
 
             //Add authorization/token command option 
-            let authExists = commandConfiguration.options.find( (x: any) => x.name == "token");
-            if (!authExists) {
+            if (enableAuth) {
                 commandConfiguration.options.push({
                     attr: "token",
                     name: "token",
