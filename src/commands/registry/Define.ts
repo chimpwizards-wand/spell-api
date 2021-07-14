@@ -207,7 +207,7 @@ export class Define extends Command  {
                     attr: "token",
                     name: "token",
                     //definition: { description: param.description, type: param.type, defaults: param.defaults },
-                    definition: { description: "Authorization token", type: 'string', alias: "x" },
+                    definition: { description: "Authorization token", type: 'string', alias: "k" },
                     required: false, //param.required||false,
                     whatIsThis: 'option',
                     context: context
