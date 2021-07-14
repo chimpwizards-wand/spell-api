@@ -66,40 +66,44 @@ export class Define extends Command  {
                 debug(`API already registered`)
                 debug(`URL: ${swaggerUrl}`)
 
-                await Swagger(swaggerUrl).then( (client: any) => {
-                    debug(`Swagger document found`)
-                    for (const key in client.spec.paths) {
-                        var pathSpec = client.spec.paths[key];
-                        for(const action in pathSpec) {
-                            var actionSpec = pathSpec[action]
+                try {
+                    await Swagger(swaggerUrl).then( (client: any) => {
+                        debug(`Swagger document found`)
+                        for (const key in client.spec.paths) {
+                            var pathSpec = client.spec.paths[key];
+                            for(const action in pathSpec) {
+                                var actionSpec = pathSpec[action]
 
-                            var subCommand: string = key.split("/")[1];
+                                var subCommand: string = key.split("/")[1];
 
-                            //Commands
-                            var command: any = {
-                                name: subCommand,
-                                commands: []
+                                //Commands
+                                var command: any = {
+                                    name: subCommand,
+                                    commands: []
+                                }
+
+                                if (actionSpec.operationId) {
+                                    command.commands.push({
+                                        name: actionSpec.operationId,
+                                        path: key,
+                                        parameters: actionSpec.parameters
+                                    })
+                                }
+
+                                this.addCommand(command, commands, action);
+
                             }
-
-                            if (actionSpec.operationId) {
-                                command.commands.push({
-                                    name: actionSpec.operationId,
-                                    path: key,
-                                    parameters: actionSpec.parameters
-                                })
-                            }
-
-                            this.addCommand(command, commands, action);
+                            
+                            
 
                         }
-                        
-                        
+                        //debug(`Commands ready: ${JSON.stringify(commands)}`)
 
-                    }
-                    //debug(`Commands ready: ${JSON.stringify(commands)}`)
-
-                    
-                });
+                        
+                    });
+                } catch (e) {
+                    debug(`Error pulling ${swaggerUrl} definition`)
+                }
 
             } else {
                 console.log(chalk.red(`API is not registered`))
