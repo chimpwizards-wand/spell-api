@@ -199,6 +199,18 @@ export class Define extends Command  {
                 parent: parent,
             }
 
+            //Add authorization/token command option 
+            commandConfiguration.options.push({
+                attr: "token",
+                name: "token",
+                //definition: { description: param.description, type: param.type, defaults: param.defaults },
+                definition: { description: "Authorization token", type: 'string', alias: "x" },
+                required: false, //param.required||false,
+                whatIsThis: 'option',
+                context: context
+            });
+
+            //Add command options
             for ( let p in parameters) {
                 let param: any = parameters[p];
                 let option = {
